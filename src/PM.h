@@ -9,7 +9,11 @@ uint16_t pm25_cf1;
 uint16_t pm25_atm;
 
 void pmSetup() {
-  
+  pinMode(12, OUTPUT);
+  digitalWrite(12, HIGH); // เปิดเซนเซอร์ PMS
+  pinMode(14, OUTPUT);
+  digitalWrite(14, HIGH); // เปิดเซนเซอร์ PMS
+  delay(2000); // รอให้เซนเซอร์พร้อมทำงาน (2วินาที)
   pms.wakeUp();
   pms.activeMode();
 }

@@ -64,7 +64,7 @@ void LCD_loop(float temperature, float humidity, uint16_t pm25_cf1, uint16_t pm2
     tft.print("PM2.5 CF=1:");
     tft.print(pm25_cf1);
     tft.println("ug/m3");
-    tft.setCursor(10, 90);
+    tft.setCursor(10, 85);
     tft.print("PM2.5 Atm:");
     tft.print(pm25_atm);
     tft.println("ug/m3");
@@ -72,7 +72,7 @@ void LCD_loop(float temperature, float humidity, uint16_t pm25_cf1, uint16_t pm2
     //Co2
     tft.setTextColor(ST7735_WHITE, ST7735_BLACK);
     tft.setTextSize(1);
-    tft.setCursor(10, 110);
+    tft.setCursor(10, 100);
     tft.print("CO2:");
     tft.print(CO2);
     tft.println("ppm");
