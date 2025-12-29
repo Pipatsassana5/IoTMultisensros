@@ -1,38 +1,39 @@
 #include <Arduino.h>
-#include "MHZ19.h"
+#include "SHT.h"
+#include "LCD.h"
+#include "PM.h"
+#include "CO2.h"
 
-#define RX_PIN 26  // ต่อกับขา TX ของ MH-Z19
-#define TX_PIN 27  // ต่อกับขา RX ของ MH-Z19
-
-MHZ19 myMHZ19;
-HardwareSerial mySerial(1); // ใช้ Hardware Serial 1
 
 void setup() {
-  Serial.begin(115200);
+  delay(100); 
 
-  // เริ่มต้น Serial 1 ที่ขา 26, 27
-  mySerial.begin(9600, SERIAL_8N1, RX_PIN, TX_PIN);
-
-  // เริ่มต้นเซนเซอร์
-  myMHZ19.begin(mySerial);
+  // 2. กำหนดขา RESET ของจอเป็น Output
+  pinMode(TFT_RST, OUTPUT);
   
-  // ปิดระบบ Auto Calibration (แนะนำให้ปิด ถ้าไม่ได้วาง outdoor ตลอดเวลา)
-  myMHZ19.autoCalibration(false);
-
-  Serial.println("MH-Z19 Warming up... (waiting 3 mins is recommended)");
+  // 3. สั่ง Reset จอแบบ Manual (ตบให้ตื่น)
+  digitalWrite(TFT_RST, HIGH);
+  delay(50);
+  digitalWrite(TFT_RST, LOW);  // ดึงขา Reset ลงกราวด์ (สั่งรีเซ็ต)
+  delay(100);                  // ค้างไว้แป๊บนึง
+  digitalWrite(TFT_RST, HIGH); // ปล่อยขา Reset (เริ่มทำงาน)
+  delay(100);                  // รอให้ชิปจอพร้อมรับคำสั่ง
+  Serial.begin(115200);
+  testSerial.begin(9600,  EspSoftwareSerial::SWSERIAL_8N1, 16, 17,false, 95, 11);
+  while (!Serial) delay(10); // รอให้ Serial Monitor พร้อม (สำคัญในบางบอร์ด)
+  SHT_setup();
+  LCD_setup();
+  CO2_setup();
+  pmSetup();
+  
+  
 }
 
 void loop() {
-  int CO2 = myMHZ19.getCO2();
-
-  Serial.print("CO2: ");
-  Serial.print(CO2);
-  Serial.println(" ppm");
-  
-  // เช็ค Error (ปกติค่าจะอยู่ที่ 400-5000)
-  if(CO2 == 0) {
-      Serial.println("⚠️ Error: Check Wiring (RX/TX crossed?)");
-  }
+    SHT_loop();
+    pmLoop();
+    Co2_loop();
+    LCD_loop(t, h, pm25_cf1, pm25_atm, CO2);
 
   delay(2000);
 }
