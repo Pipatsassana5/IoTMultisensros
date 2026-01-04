@@ -1,6 +1,9 @@
 #include <PMS.h>
 #include <SoftwareSerial.h>
 
+#define PMS_SET 14
+#define PMS_RESET 12
+
 EspSoftwareSerial::UART testSerial ;
 PMS pms(testSerial);
 PMS::DATA data;
@@ -9,13 +12,12 @@ uint16_t pm25_cf1;
 uint16_t pm25_atm;
 
 void pmSetup() {
-  pinMode(12, OUTPUT);
-  digitalWrite(12, HIGH); // เปิดเซนเซอร์ PMS
-  pinMode(14, OUTPUT);
-  digitalWrite(14, HIGH); // เปิดเซนเซอร์ PMS
+  pinMode(PMS_RESET, OUTPUT);
+  digitalWrite(PMS_RESET, HIGH); // เปิดเซนเซอร์ PMS
+  
+  digitalWrite(PMS_SET, HIGH); // เปิดเซนเซอร์ PMS
   delay(2000); // รอให้เซนเซอร์พร้อมทำงาน (2วินาที)
-  pms.wakeUp();
-  pms.activeMode();
+  
 }
 
 void pmLoop() {

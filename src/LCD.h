@@ -39,7 +39,7 @@ void LCD_setup() {
 
 }
 
-void LCD_loop(float temperature, float humidity, uint16_t pm25_cf1, uint16_t pm25_atm, int CO2) {
+void LCD_loop(float temperature, float humidity, uint16_t pm25_cf1, uint16_t pm25_atm, int CO2, float windSpeed) {
   // ล้างพื้นที่แสดงผลเก่า
   tft.fillRect(0, 60, tft.width(), 40, ST7735_BLACK);
   
@@ -76,6 +76,14 @@ void LCD_loop(float temperature, float humidity, uint16_t pm25_cf1, uint16_t pm2
     tft.print("CO2:");
     tft.print(CO2);
     tft.println("ppm");
+
+    // Wind Speed
+    tft.setTextColor(ST7735_WHITE, ST7735_BLACK);
+    tft.setTextSize(1);
+    tft.setCursor(10, 115);
+    tft.print("Wind:");
+    tft.print(windSpeed);
+    tft.println("m/s");
 }
 
 void LCD_test(){

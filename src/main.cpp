@@ -1,4 +1,4 @@
-#include <Arduino.h>
+
 #include "SHT.h"
 #include "LCD.h"
 #include "PM.h"
@@ -6,7 +6,9 @@
 
 
 void setup() {
-  delay(100); 
+  pinMode(PMS_SET, OUTPUT); digitalWrite(PMS_SET, LOW);
+  
+  delay(2000); 
 
   // 2. กำหนดขา RESET ของจอเป็น Output
   pinMode(TFT_RST, OUTPUT);
@@ -21,19 +23,24 @@ void setup() {
   Serial.begin(115200);
   testSerial.begin(9600,  EspSoftwareSerial::SWSERIAL_8N1, 16, 17,false, 95, 11);
   while (!Serial) delay(10); // รอให้ Serial Monitor พร้อม (สำคัญในบางบอร์ด)
+  Wire.begin();
   SHT_setup();
   LCD_setup();
   CO2_setup();
+  resetI2C();
+  
+  
+  
+  delay(5000);
   pmSetup();
-  
-  
 }
 
 void loop() {
     SHT_loop();
     pmLoop();
     Co2_loop();
-    LCD_loop(t, h, pm25_cf1, pm25_atm, CO2);
+    Loop_WindSensor();
+    LCD_loop(t, h, pm25_cf1, pm25_atm, CO2, windSpeed);
 
-  delay(2000);
+  delay(500);
 }
