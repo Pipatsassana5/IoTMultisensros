@@ -10,7 +10,7 @@ void SHT_setup() {
 Serial.println("SHT31 Test");
   if (!sht31.begin(0x44)) {   
     Serial.println("Couldn't find SHT31");
-    while (1) delay(1); // หยุดทำงานถ้าหาเซนเซอร์ไม่เจอ
+    
   }
   Serial.println("SHT31 Found!");
 }
