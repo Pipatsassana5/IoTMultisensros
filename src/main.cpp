@@ -3,6 +3,8 @@
 #include "LCD.h"
 #include "PM.h"
 #include "CO2.h"
+#include "simplewifi.h"
+#include "sendata.h"
 
 
 void setup() {
@@ -24,23 +26,32 @@ void setup() {
   testSerial.begin(9600,  EspSoftwareSerial::SWSERIAL_8N1, 16, 17,false, 95, 11);
   while (!Serial) delay(10); // รอให้ Serial Monitor พร้อม (สำคัญในบางบอร์ด)
   Wire.begin();
+  setupWiFi();
   SHT_setup();
   LCD_setup();
   CO2_setup();
   resetI2C();
-  
-  
-  
   delay(5000);
   pmSetup();
 }
 
 void loop() {
-    SHT_loop();
+
+  
+  
+   SHT_loop();
     pmLoop();
     Co2_loop();
-    Loop_WindSensor();
+   Loop_WindSensor();
+    LCD_showIP(WiFi.localIP());
     LCD_loop(t, h, pm25_cf1, pm25_atm, CO2, windSpeed);
 
-  delay(500);
+    
+      if(WiFi.status() == WL_CONNECTED){
+      sendDataToServer(t, h, pm25_cf1, pm25_atm, CO2, windSpeed);
+    }else{
+      Serial.println("⚠️ WiFi Disconnected");
+    }
+  
+
 }

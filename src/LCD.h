@@ -32,12 +32,17 @@ void LCD_setup() {
   
   // แสดงข้อความ
   tft.setRotation(1); // หมุนแนวนอน (0-3)
-  tft.setTextColor(ST7735_WHITE);
+  
+}
+
+void LCD_showIP(IPAddress ip) {
+  tft.setTextColor(ST7735_WHITE, ST7735_BLACK);
   tft.setTextSize(2);
   tft.setCursor(10, 10);
-  tft.println("IoT Weather");
-
+  tft.print("IP:");
+  tft.print(ip);
 }
+
 
 void LCD_loop(float temperature, float humidity, uint16_t pm25_cf1, uint16_t pm25_atm, int CO2, float windSpeed) {
   // ล้างพื้นที่แสดงผลเก่า
