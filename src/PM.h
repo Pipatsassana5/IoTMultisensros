@@ -1,3 +1,37 @@
+/* #include <PMS.h>
+
+
+HardwareSerial pmsSerial(2);
+PMS pms(pmsSerial);
+PMS::DATA data;
+
+uint16_t pm25_cf1;
+uint16_t pm25_atm;
+
+void pmSetup() {
+ 
+  pmsSerial.begin(9600, SERIAL_8N1, 16, 17);
+  pms.wakeUp();
+  delay(3000); 
+  pms.activeMode();
+}
+
+void pmLoop() {
+  if (pms.read(data)) {
+    Serial.println("---------------------------------------");
+    Serial.print("PM 1.0 (CF=1): "); Serial.print(data.PM_SP_UG_1_0); Serial.println(" ug/m3");
+    Serial.print("PM 2.5 (CF=1): "); Serial.print(data.PM_SP_UG_2_5); Serial.println(" ug/m3");
+    Serial.print("PM 10.0 (CF=1): "); Serial.print(data.PM_SP_UG_10_0); Serial.println(" ug/m3");
+    
+    Serial.print("PM 1.0 (Atm): "); Serial.print(data.PM_AE_UG_1_0); Serial.println(" ug/m3");
+    Serial.print("PM 2.5 (Atm): "); Serial.print(data.PM_AE_UG_2_5); Serial.println(" ug/m3");
+    Serial.print("PM 10.0 (Atm): "); Serial.print(data.PM_AE_UG_10_0); Serial.println(" ug/m3"); 
+    Serial.println("---------------------------------------");
+  } else {
+    Serial.println("No data received from PMS sensor");
+  }
+} */
+
 #include <PMS.h>
 #include <SoftwareSerial.h>
 
@@ -12,12 +46,11 @@ uint16_t pm25_cf1;
 uint16_t pm25_atm;
 
 void pmSetup() {
-  pinMode(PMS_RESET, OUTPUT);
-  digitalWrite(PMS_RESET, HIGH); // เปิดเซนเซอร์ PMS
   
-  digitalWrite(PMS_SET, HIGH); // เปิดเซนเซอร์ PMS
-  delay(2000); // รอให้เซนเซอร์พร้อมทำงาน (2วินาที)
-  
+  testSerial.begin(9600,  EspSoftwareSerial::SWSERIAL_8N1, 16, 17,false, 95, 11);
+  pms.wakeUp();
+  delay(3000); 
+  pms.activeMode();
 }
 
 void pmLoop() {

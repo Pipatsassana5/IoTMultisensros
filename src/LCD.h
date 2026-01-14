@@ -37,7 +37,7 @@ void LCD_setup() {
 
 void LCD_showIP(IPAddress ip) {
   tft.setTextColor(ST7735_WHITE, ST7735_BLACK);
-  tft.setTextSize(2);
+  tft.setTextSize(1);
   tft.setCursor(10, 10);
   tft.print("IP:");
   tft.print(ip);

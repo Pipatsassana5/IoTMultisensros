@@ -2,9 +2,17 @@
 
 // เปลี่ยนเป็น URL ของไฟล์ PHP บน Server จริงของคุณ
 const char* serverName = "http://ath108.com/iot/insert.php"; 
-
+unsigned long lastSendTime = 0;        // เก็บเวลาที่ส่งล่าสุด
+const unsigned long sendInterval = 60000; // ระยะเวลา 1 นาที (60000 ms)
 void sendDataToServer(float temperature, float humidity, uint16_t pm25_cf1, uint16_t pm25_atm, int CO2, float windSpeed) {
+
+  unsigned long currentMillis = millis();
+
+  // 2. ถ้าเวลาผ่านไปครบ 1 นาที ให้ทำในวงเล็บ
+  if (currentMillis - lastSendTime >= sendInterval) {
+    lastSendTime = currentMillis; // อัปเดตเวลาล่าสุด
   if(WiFi.status() == WL_CONNECTED){
+
     HTTPClient http;
     
     // เริ่มเชื่อมต่อ
@@ -42,4 +50,5 @@ void sendDataToServer(float temperature, float humidity, uint16_t pm25_cf1, uint
   else {
     Serial.println("⚠️ WiFi Disconnected");
   }
+}
 }

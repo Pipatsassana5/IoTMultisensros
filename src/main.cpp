@@ -8,8 +8,8 @@
 
 
 void setup() {
-  pinMode(PMS_SET, OUTPUT); digitalWrite(PMS_SET, LOW);
-  
+
+ 
   delay(2000); 
 
   // 2. กำหนดขา RESET ของจอเป็น Output
@@ -22,24 +22,26 @@ void setup() {
   delay(100);                  // ค้างไว้แป๊บนึง
   digitalWrite(TFT_RST, HIGH); // ปล่อยขา Reset (เริ่มทำงาน)
   delay(100);                  // รอให้ชิปจอพร้อมรับคำสั่ง
-  Serial.begin(115200);
-  testSerial.begin(9600,  EspSoftwareSerial::SWSERIAL_8N1, 16, 17,false, 95, 11);
-  while (!Serial) delay(10); // รอให้ Serial Monitor พร้อม (สำคัญในบางบอร์ด)
-  Wire.begin();
+  
+  Serial.begin(115200); 
+  
+  Wire.begin(21,22);
+  Wire.setClock(100000); 
+
   setupWiFi();
   SHT_setup();
   LCD_setup();
   CO2_setup();
-  resetI2C();
-  delay(5000);
+  
+ // delay(5000);
   pmSetup();
 }
 
 void loop() {
 
-  
-  
-   SHT_loop();
+
+
+  SHT_loop();
     pmLoop();
     Co2_loop();
    Loop_WindSensor();
@@ -52,6 +54,6 @@ void loop() {
     }else{
       Serial.println("⚠️ WiFi Disconnected");
     }
-  
-
+    
+  delay(500); 
 }
